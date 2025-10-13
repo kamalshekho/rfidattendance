@@ -1,11 +1,9 @@
-
 <?xml version="1.0" encoding="UTF-8" ?>
 <XMLDB PATH="mod/rfidattendance/db" VERSION="2025101000" COMMENT="XMLDB file for Rfid Tool module"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance";
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd">
 
   <TABLES>
-    <!-- Minimal table just to satisfy Moodle -->
     <TABLE NAME="rfidattendance" COMMENT="Dummy table for Rfid Tool module">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
