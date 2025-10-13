@@ -5,7 +5,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Returns information about the module.
  */
-function simplebutton_supports($feature) {
+function rfidattendance_supports($feature) {
   switch($feature) {
     case FEATURE_MOD_INTRO: return true;
     default: return null;
@@ -13,28 +13,28 @@ function simplebutton_supports($feature) {
 }
 
 /**
- * Add a new simplebutton instance.
+ * Add a new rfidattendance instance.
  */
-function simplebutton_add_instance($data, $mform = null) {
+function rfidattendance_add_instance($data, $mform = null) {
   global $DB;
   $data->timecreated = time();
-  return $DB->insert_record('simplebutton', $data);
+  return $DB->insert_record('rfidattendance', $data);
 }
 
 /**
- * Update a simplebutton instance.
+ * Update a rfidattendance instance.
  */
-function simplebutton_update_instance($data, $mform = null) {
+function rfidattendance_update_instance($data, $mform = null) {
   global $DB;
   $data->id = $data->instance;
   $data->timemodified = time();
-  return $DB->update_record('simplebutton', $data);
+  return $DB->update_record('rfidattendance', $data);
 }
 
 /**
- * Delete a simplebutton instance.
+ * Delete a rfidattendance instance.
  */
-function simplebutton_delete_instance($id) {
+function rfidattendance_delete_instance($id) {
   global $DB;
-  return $DB->delete_records('simplebutton', ['id' => $id]);
+  return $DB->delete_records('rfidattendance', ['id' => $id]);
 }

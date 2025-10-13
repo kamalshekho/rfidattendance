@@ -3,7 +3,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
-  'mod/simplebutton:addinstance' => [
+  'mod/rfidattendance:addinstance' => [
     'captype' => 'write',
     'contextlevel' => CONTEXT_COURSE,
     'archetypes' => [
@@ -12,11 +12,10 @@ $capabilities = [
     ],
   ],
 
-  'mod/simplebutton:view' => [
+  'mod/rfidattendance:view' => [
     'captype' => 'read',
     'contextlevel' => CONTEXT_MODULE,
     'archetypes' => [
-      'student' => CAP_ALLOW,
       'teacher' => CAP_ALLOW,
       'manager' => CAP_ALLOW,
     ],

@@ -1,7 +1,7 @@
 <?php
-$string['pluginname'] = 'Simple Button';
-$string['modulename'] = 'Simple Button';
-$string['modulenameplural'] = 'Simple Buttons';
-$string['simplebutton:addinstance'] = 'Add a new Simple Button activity';
-$string['simplebutton:view'] = 'View Simple Button';
+$string['pluginname'] = 'Rfid Tool';
+$string['modulename'] = 'Rfid Tool';
+$string['modulenameplural'] = 'Rfid Tool';
+$string['rfidattendance:addinstance'] = 'Add a new Rfid Tool activity';
+$string['rfidattendance:view'] = 'View Rfid Tool';
 $string['pressme'] = 'Press Me!';
