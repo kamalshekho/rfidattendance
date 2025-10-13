@@ -6,7 +6,6 @@ function xmldb_rfidattendance_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2025101002) {
-
         $table = new xmldb_table('rfidattendance_mapping');
         if (!$dbman->table_exists($table)) {
             $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE);
@@ -38,6 +37,23 @@ function xmldb_rfidattendance_upgrade($oldversion) {
         }
 
         upgrade_mod_savepoint(true, 2025101002, 'rfidattendance');
+    }
+
+    if ($oldversion < 2025101003) {
+        $table = new xmldb_table('rfidattendance_sessions');
+        if (!$dbman->table_exists($table)) {
+            $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+            $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
+            $table->add_field('sessiondate', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
+            $table->add_field('starttime', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
+            $table->add_field('endtime', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
+            $table->add_field('active', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, 0);
+
+            $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+            $dbman->create_table($table);
+        }
+
+        upgrade_mod_savepoint(true, 2025101003, 'rfidattendance');
     }
 
     return true;
