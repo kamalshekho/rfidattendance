@@ -2,7 +2,7 @@
 require('../../config.php');
 require_login();
 
-$id = required_param('id', PARAM_INT); // Course module ID.
+$id = required_param('id', PARAM_INT); 
 $cm = get_coursemodule_from_id('rfidattendance', $id, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
 $context = context_module::instance($cm->id);
@@ -18,7 +18,7 @@ echo $OUTPUT->header();
 
 
 echo html_writer::tag('button',
-  get_string('pressme', 'rfidattendance'),
+  'Neuer Text ohne String!',
   ['id' => 'rfidattendance', 'class' => 'btn btn-primary']
 );
 

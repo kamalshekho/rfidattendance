@@ -1,22 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/rfidattendance/db" VERSION="2025101000" COMMENT="XMLDB file for Rfid Tool module"
+<XMLDB PATH="mod/rfidattendance/db" VERSION="2025101001" COMMENT="XMLDB file for Rfid Tool module"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd">
 
   <TABLES>
-    <TABLE NAME="rfidattendance" COMMENT="Dummy table for Rfid Tool module">
+    <!-- UID ↔ Moodle User -->
+    <TABLE NAME="rfidattendance_mapping" COMMENT="Mapping RFID UID to Moodle user">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
-        <FIELD NAME="intro" TYPE="text" NOTNULL="false"/>
-        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="uid" TYPE="char" LENGTH="255" NOTNULL="true"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="idx_uid" UNIQUE="true" FIELDS="uid"/>
+        <INDEX NAME="idx_userid" UNIQUE="false" FIELDS="userid"/>
+      </INDEXES>
     </TABLE>
+
+    <!-- Check-in / Check-out Logs -->
+    <TABLE NAME="rfidattendance_logs" COMMENT="RFID Attendance Logs">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="sessiondate" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="checkintime" TYPE="int" LENGTH="10" NOTNULL="false"/>
+        <FIELD NAME="checkouttime" TYPE="int" LENGTH="10" NOTNULL="false"/>
+        <FIELD NAME="uid" TYPE="char" LENGTH="255" NOTNULL="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="idx_uid" UNIQUE="false" FIELDS="uid"/>
+        <INDEX NAME="idx_user_course_date" UNIQUE="false" FIELDS="userid,courseid,sessiondate"/>
+      </INDEXES>
+    </TABLE>
+
   </TABLES>
 </XMLDB>
