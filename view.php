@@ -22,8 +22,8 @@ echo $OUTPUT->header();
 
 echo '<ul class="nav nav-tabs" id="rfidTabs" role="tablist">';
 $tabs = [
-    'sessions'     => 'Sessions',
     'dashboard'    => 'Dashboard',
+    'sessions'     => 'Sessions',
     'participants' => 'Participants / UID',
 
 ];
