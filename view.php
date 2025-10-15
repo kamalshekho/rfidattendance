@@ -25,7 +25,6 @@ $tabs = [
     'dashboard'    => 'Dashboard',
     'sessions'     => 'Sessions',
     'participants' => 'Participants / UID',
-
 ];
 $first = true;
 foreach ($tabs as $idtab => $label) {
@@ -39,6 +38,11 @@ echo '</ul>';
 echo '<div class="tab-content mt-3" id="rfidTabsContent">';
 
 echo '<div class="tab-pane fade show active" id="participants" role="tabpanel">';
+echo '<div class="d-flex justify-content-between mb-2">';
+echo '<h5>Assigned UIDs</h5>';
+echo '<button class="btn btn-danger btn-sm" id="remove-all-uids">Remove All UIDs</button>';
+echo '</div>';
+
 $participants = mapping::get_all_for_course($course->id);
 
 echo '<table class="table table-striped table-bordered">';
@@ -46,7 +50,11 @@ echo '<thead><tr><th>Name</th><th>UID</th><th>Action</th></tr></thead>';
 echo '<tbody>';
 foreach ($participants as $u) {
     $uid = $u->uid ?? '';
-    $button = $uid ? '' : '<button class="btn btn-success btn-sm assign-uid" data-userid="'.$u->id.'">Scan New Card</button>';
+    if ($uid) {
+        $button = '<button class="btn btn-danger btn-sm remove-uid" data-userid="'.$u->id.'">Remove UID</button>';
+    } else {
+        $button = '<button class="btn btn-success btn-sm assign-uid" data-userid="'.$u->id.'">Scan New Card</button>';
+    }
     echo '<tr>';
     echo '<td>'.$u->firstname.' '.$u->lastname.'</td>';
     echo '<td>'.$uid.'</td>';
@@ -84,16 +92,15 @@ foreach ($sessions as $s) {
 echo '</tbody></table>';
 echo '</div>';
 
-
 echo '<div class="tab-pane fade" id="dashboard" role="tabpanel">';
 echo '<p>Statistics and charts will appear here.</p>';
 echo '</div>';
 
 echo '</div>';
 
-
 $js = <<<JS
 document.addEventListener('DOMContentLoaded', function(){
+
     document.querySelectorAll('.assign-uid').forEach(button=>{
         button.addEventListener('click', ()=>{
             const userid = button.dataset.userid;
@@ -113,6 +120,42 @@ document.addEventListener('DOMContentLoaded', function(){
                 });
             }
         });
+    });
+
+    document.querySelectorAll('.remove-uid').forEach(button=>{
+        button.addEventListener('click', ()=>{
+            const userid = button.dataset.userid;
+            if(confirm('Are you sure you want to remove this UID?')){
+                fetch('api_remove_uid.php',{
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({userid:userid})
+                }).then(res=>res.json()).then(data=>{
+                    if(data.success){
+                        alert('UID removed successfully!');
+                        location.reload();
+                    }else{
+                        alert('Error: '+data.error);
+                    }
+                });
+            }
+        });
+    });
+
+    document.getElementById('remove-all-uids').addEventListener('click', ()=>{
+        if(confirm('⚠️ This will remove ALL UIDs globally. Are you sure?')){
+            fetch('api_remove_all_uids.php',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'}
+            }).then(res=>res.json()).then(data=>{
+                if(data.success){
+                    alert('All UIDs removed successfully!');
+                    location.reload();
+                }else{
+                    alert('Error: '+data.error);
+                }
+            });
+        }
     });
 });
 JS;
