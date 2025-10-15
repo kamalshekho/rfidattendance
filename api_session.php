@@ -2,6 +2,8 @@
 require('../../config.php');
 require_login();
 
+date_default_timezone_set('Europe/Berlin');
+
 global $DB;
 
 $id       = required_param('id', PARAM_INT);    

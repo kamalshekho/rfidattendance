@@ -1,30 +1,32 @@
 <?php
 require('../../config.php');
-require_capability('mod/rfidattendance:addinstance', context_system::instance());
-
-$input = json_decode(file_get_contents('php://input'), true);
-
-if (!isset($input['uid']) || !isset($input['userid'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing parameters']);
-    exit;
-}
+require_login();
 
 global $DB;
 
-// Prüfen ob UID schon existiert
-$existing = $DB->get_record('rfidattendance_mapping', ['uid' => $input['uid']]);
-if ($existing) {
-    http_response_code(409);
-    echo json_encode(['error' => 'UID already assigned']);
-    exit;
-}
+$id        = required_param('id', PARAM_INT);    
+$courseid  = required_param('courseid', PARAM_INT);
+$sessiondate = required_param('sessiondate', PARAM_TEXT);
+$starttime   = required_param('starttime', PARAM_TEXT);   
+$endtime     = required_param('endtime', PARAM_TEXT);     
 
-// Mapping anlegen
-$record = (object)[
-    'userid' => $input['userid'],
-    'uid' => $input['uid']
-];
-$DB->insert_record('rfidattendance_mapping', $record);
+$cm = get_coursemodule_from_id('rfidattendance', $id, 0, false, MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
+$context = context_module::instance($cm->id);
+require_capability('mod/rfidattendance:addinstance', $context);
 
-echo json_encode(['success' => true]);
+// Zeitzone setzen
+date_default_timezone_set('Europe/Berlin');
+
+$record = new stdClass();
+$record->courseid    = $courseid;
+$record->sessiondate = strtotime($sessiondate);  // Tagesbeginn
+$record->starttime   = strtotime($sessiondate . ' ' . $starttime); // exakte Startzeit
+$record->endtime     = strtotime($sessiondate . ' ' . $endtime);   // exakte Endzeit
+$record->active      = 1;
+
+$DB->insert_record('rfidattendance_sessions', $record);
+
+// Zurück zur Übersicht
+$redirecturl = new moodle_url('/mod/rfidattendance/view.php', ['id' => $id]);
+redirect($redirecturl);
