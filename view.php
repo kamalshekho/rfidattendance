@@ -2,6 +2,8 @@
 require('../../config.php');
 require_login();
 
+date_default_timezone_set('Europe/Berlin');
+
 use mod_rfidattendance\mapping;
 
 global $DB, $OUTPUT, $PAGE;
